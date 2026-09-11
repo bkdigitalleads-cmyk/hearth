@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "Hearth",
+    "description": "Homeschool attendance, hours and portfolio tracker.",
     "slug": "hearth-homeschool-tracker",
     "version": "1.0.0",
     "orientation": "portrait",

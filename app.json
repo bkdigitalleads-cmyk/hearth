@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "Hearth",
+    "slug": "hearth-homeschool-tracker",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.bwk.hearth",
+      "buildNumber": "1",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSFaceIDUsageDescription": "Hearth uses Face ID to lock your homeschool records so only you can see them."
+      }
+    },
+    "android": {
+      "package": "com.bwk.hearth",
+      "adaptiveIcon": {
+        "backgroundColor": "#1C1512",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-sqlite",
+      "expo-local-authentication",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Hearth lets you attach photos of your student's work from your library to a lesson entry.",
+          "cameraPermission": "Hearth uses the camera to photograph work samples for your homeschool portfolio."
+        }
+      ]
+    ],
+    "extra": {
+      "revenueCatApiKeyIos": "appl_wRUYlqnMIpphknzAIzbkyQAafqM",
+      "eas": {
+        "projectId": "00b6483d-526c-4d76-bd50-b93b9f0e89c7"
+      }
+    },
+    "owner": "bkdeveloper123"
+  }
+}

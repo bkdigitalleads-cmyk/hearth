@@ -76,13 +76,13 @@ const CSS = `
   .cert { margin-top: 26px; border: 1px solid #e0d2c4; border-radius: 10px; padding: 14px 16px; font-size: 12px; line-height: 1.5; page-break-inside: avoid; }
   .sig { display: flex; gap: 28px; margin-top: 26px; }
   .sig div { flex: 1; border-top: 1px solid #2a211a; padding-top: 4px; font-size: 11px; color: #6b5b4e; }
-  .footer { margin-top: 24px; color: #a08e7e; font-size: 10px; text-align: center; }
+  .footer { margin-top: 24px; color: #6b5b4e; font-size: 10px; text-align: center; }
   .entry { border-bottom: 1px solid #ece2d8; padding: 10px 0; display: flex; gap: 12px; page-break-inside: avoid; }
   .entry .meta { font-size: 11px; color: #6b5b4e; }
   .entry .title { font-weight: 600; font-size: 13px; }
   .entry .notes { font-size: 12px; margin-top: 3px; white-space: pre-wrap; }
   .entry img { width: 150px; height: 150px; object-fit: cover; border-radius: 8px; }
-  .noimg { width: 150px; height: 150px; border-radius: 8px; background: #f0e6dc; color: #a08e7e; font-size: 9px; display: flex; align-items: center; justify-content: center; text-align: center; }
+  .noimg { width: 150px; height: 150px; border-radius: 8px; background: #f0e6dc; color: #6b5b4e; font-size: 9px; display: flex; align-items: center; justify-content: center; text-align: center; }
 `;
 
 interface Scope {
@@ -126,8 +126,15 @@ export async function buildAttendanceHtml(studentId: number | null): Promise<str
   const days = await getDayTotals(sc.filter);
   const subjects = await getSubjectTotals(sc.filter);
 
-  const dayPct = target.days ? Math.min(100, Math.round((stats.dayCount / target.days) * 100)) : null;
-  const hourPct = target.hours ? Math.min(100, Math.round((stats.totalMin / (target.hours * 60)) * 100)) : null;
+  // Round toward "<1%" rather than "0%": a parent who has logged real hours
+  // should never read a flat zero back on their own record.
+  const fmtPct = (done: number, goal: number): string => {
+    const raw = (done / goal) * 100;
+    if (done > 0 && raw < 1) return '<1';
+    return String(Math.min(100, Math.round(raw)));
+  };
+  const dayPct = target.days ? fmtPct(stats.dayCount, target.days) : null;
+  const hourPct = target.hours ? fmtPct(stats.totalMin, target.hours * 60) : null;
   const pctParts: string[] = [];
   if (dayPct != null) pctParts.push(`${dayPct}% of the ${target.days}-day target`);
   if (hourPct != null) pctParts.push(`${hourPct}% of the ${target.hours}-hour target`);

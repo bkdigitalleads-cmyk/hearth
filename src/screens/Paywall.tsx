@@ -92,7 +92,13 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
 
   // Lifetime is the hero — show it first.
   const rank = (p: PurchasesPackage) =>
-    p.packageType === 'LIFETIME' ? 0 : p.packageType === 'ANNUAL' ? 1 : 2;
+    p.packageType === 'LIFETIME'
+      ? 0
+      : p.packageType === 'ANNUAL'
+        ? 1
+        : p.packageType === 'WEEKLY'
+          ? 2
+          : 3;
   const packages = [...(offering?.availablePackages ?? [])].sort(
     (a, b) => rank(a) - rank(b),
   );
@@ -151,6 +157,7 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
                 const active = selected?.identifier === p.identifier;
                 const isAnnual = p.packageType === 'ANNUAL';
                 const isLifetime = p.packageType === 'LIFETIME';
+                const isWeekly = p.packageType === 'WEEKLY';
                 const monthly =
                   isAnnual && p.product.price
                     ? `just ${(p.product.price / 12).toLocaleString(undefined, {
@@ -172,7 +179,13 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
                   >
                     <View style={{ flex: 1 }}>
                       <Text style={[styles.pkgTitle, { color: theme.text }]}>
-                        {isAnnual ? 'Yearly' : isLifetime ? 'Lifetime' : p.product.title}
+                        {isAnnual
+                          ? 'Yearly'
+                          : isLifetime
+                            ? 'Lifetime'
+                            : isWeekly
+                              ? 'Weekly'
+                              : p.product.title}
                       </Text>
                       {isLifetime && (
                         <Text style={[styles.pkgBadge, { color: theme.accent }]}>
@@ -188,7 +201,7 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
                     <Text style={[styles.pkgPrice, { color: theme.text }]}>
                       {p.product.priceString}
                       <Text style={{ color: theme.textSecondary, fontSize: 13 }}>
-                        {isAnnual ? '/yr' : isLifetime ? '' : '/mo'}
+                        {isAnnual ? '/yr' : isLifetime ? '' : isWeekly ? '/wk' : '/mo'}
                       </Text>
                     </Text>
                   </Pressable>
@@ -200,11 +213,15 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
                 onPress={buy}
                 disabled={purchasing || !selected}
               />
-              {selected?.packageType === 'LIFETIME' && (
+              {selected?.packageType === 'LIFETIME' ? (
                 <Text style={[styles.noPayment, { color: theme.success }]}>
                   ✓ One-time purchase — no subscription
                 </Text>
-              )}
+              ) : selected?.product.introPrice?.price === 0 ? (
+                <Text style={[styles.noPayment, { color: theme.success }]}>
+                  ✓ No payment now
+                </Text>
+              ) : null}
             </View>
           )}
         </ScrollView>

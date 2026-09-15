@@ -175,7 +175,7 @@ export default function HomeScreen({
               </Text>
             </Card>
 
-            {(atFreeLimit || nearFreeLimit) && (
+            {!isPro && (
               <Pressable onPress={showPaywall}>
                 <Card theme={theme} style={{ ...styles.limitCard, backgroundColor: theme.accentSoft }}>
                   <Text style={[styles.limitText, { color: theme.accent }]}>

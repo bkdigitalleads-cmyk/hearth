@@ -46,13 +46,12 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
     (async () => {
       const off = await getOffering();
       setOffering(off);
-      // Homeschool families keep records for years, so the one-time Lifetime
-      // purchase is the hero and default; the yearly subscription is the
-      // anchor for families trying a single school year. The 14-entry free
-      // tier is the funnel, so there's no separate time-limited trial.
-      const lifetime =
-        off?.lifetime ?? off?.annual ?? off?.availablePackages?.[0] ?? null;
-      setSelected(lifetime);
+      // The yearly plan is the hero and default: it carries the free trial,
+      // so it is the lowest-commitment way in. Lifetime is priced above a
+      // year on purpose, as the anchor for families who would rather pay once.
+      const annual =
+        off?.annual ?? off?.lifetime ?? off?.availablePackages?.[0] ?? null;
+      setSelected(annual);
       setLoading(false);
     })();
   }, [paywallVisible]);
@@ -90,11 +89,11 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
     }
   };
 
-  // Lifetime is the hero — show it first.
+  // Yearly is the hero, so it goes first; Lifetime sits under it as the anchor.
   const rank = (p: PurchasesPackage) =>
-    p.packageType === 'LIFETIME'
+    p.packageType === 'ANNUAL'
       ? 0
-      : p.packageType === 'ANNUAL'
+      : p.packageType === 'LIFETIME'
         ? 1
         : p.packageType === 'WEEKLY'
           ? 2
@@ -198,8 +197,8 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
                               : p.product.title}
                       </Text>
                       {isLifetime && (
-                        <Text style={[styles.pkgBadge, { color: theme.accent }]}>
-                          Best value · pay once, keep forever
+                        <Text style={[styles.pkgBadge, { color: theme.textSecondary }]}>
+                          Or pay once, yours forever
                         </Text>
                       )}
                       {isAnnual && (

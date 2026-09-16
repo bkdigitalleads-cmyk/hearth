@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Constants from 'expo-constants';
 import {
   Alert,
   FlatList,
@@ -345,7 +346,7 @@ export default function SettingsScreen() {
         </Pressable>
       </Card>
 
-      <Text style={[styles.version, { color: theme.textFaint }]}>Hearth v1.0.0 · Made with care in NYC</Text>
+      <Text style={[styles.version, { color: theme.textFaint }]}>Hearth v{Constants.expoConfig?.version ?? ''} · Made with care in NYC</Text>
 
       <Modal visible={statePickerOpen} animationType="slide" onRequestClose={() => setStatePickerOpen(false)}>
         <View style={{ flex: 1, backgroundColor: theme.bg }}>

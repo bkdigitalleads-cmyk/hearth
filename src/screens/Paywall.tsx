@@ -119,6 +119,23 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
   const annualPrice = packages.find((p) => p.packageType === 'ANNUAL')?.product
     .priceString;
 
+  // The weekly plan's price, length and free trial must be stated in the app
+  // too (App Review guideline 3.1.2(c)).
+  const weeklyPkg = packages.find((p) => p.packageType === 'WEEKLY');
+  const weeklyIntro = weeklyPkg?.product.introPrice;
+  const weeklyTrialText =
+    weeklyIntro && weeklyIntro.price === 0
+      ? `${weeklyIntro.periodNumberOfUnits} ${weeklyIntro.periodUnit.toLowerCase()}${
+          weeklyIntro.periodNumberOfUnits === 1 ? '' : 's'
+        } free`
+      : null;
+  const weeklyPrice = weeklyPkg?.product.priceString;
+  const weeklyDisclosure = weeklyPrice
+    ? ` Weekly ${weeklyPrice} is an auto-renewing subscription billed once per week until cancelled${
+        weeklyTrialText ? `; it starts with ${weeklyTrialText}, and you are not charged until the trial ends` : ''
+      }.`
+    : '';
+
   return (
     <Modal
       visible={paywallVisible}
@@ -206,6 +223,13 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
                           {trialText ? `${trialText}, then ${p.product.priceString}/yr` : monthly ? `Or ${monthly}, billed yearly` : 'Or billed yearly'}
                         </Text>
                       )}
+                      {isWeekly && (
+                        <Text style={[styles.pkgBadge, { color: theme.textSecondary }]}>
+                          {weeklyTrialText
+                            ? `${weeklyTrialText}, then ${p.product.priceString}/week`
+                            : 'Billed weekly'}
+                        </Text>
+                      )}
                     </View>
                     <Text style={[styles.pkgPrice, { color: theme.text }]}>
                       {p.product.priceString}
@@ -253,6 +277,7 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
             one-time purchase; or Yearly{annualPrice ? ` ${annualPrice}` : ''}, an
             auto-renewing subscription billed once per year until cancelled.
             {trialText ? ` The yearly plan starts with ${trialText}; you are not charged until it ends.` : ''}
+            {weeklyDisclosure}
             {' '}Cancel anytime in your Apple ID settings.
           </Text>
           <View style={styles.legalLinks}>

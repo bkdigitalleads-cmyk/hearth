@@ -53,11 +53,12 @@ const SLIDES: { icon: string; title: string; body: string }[] = [
   },
 ];
 
+// Slides are skipped: the paywall now opens first (Young, Gate 3), then these steps.
 export default function Onboarding({ onDone }: { onDone: () => void }) {
   const theme = useTheme();
   const { updateSettings, bumpData } = useApp();
   const [page, setPage] = useState(0);
-  const [step, setStep] = useState<'slides' | 'student' | 'state' | 'source'>('slides');
+  const [step, setStep] = useState<'slides' | 'student' | 'state' | 'source'>('student');
   const [name, setName] = useState('');
   const [saving, setSaving] = useState(false);
   const scrollRef = useRef<ScrollView>(null);

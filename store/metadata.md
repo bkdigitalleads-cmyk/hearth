@@ -93,3 +93,10 @@ of a student's work to a lesson entry. State requirement summaries are informati
 4. Portfolio PDF page with a work-sample photo
 5. Settings → State & target (state picker or the state row with days/hours)
 6. Paywall (lifetime hero) — also record the 30–60s paywall video here
+
+## Rename, Sep 30 2026 (version 1.0.4)
+
+- Name (en-US, all locales): `Homeschool Tracker & Planner`
+- Subtitle (en-US): `Attendance Log, Hours, Records`
+- Keywords (en-US): `record,keeping,scheduler,portfolio,lesson,curriculum,student,transcript,grade,state,compliance,pdf`
+- Reason: the head term with measured search demand leads the name; no brand word (Steve Young rule). Set in App Store Connect on version 1.0.4.

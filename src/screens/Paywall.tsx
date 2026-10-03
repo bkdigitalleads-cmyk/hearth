@@ -60,8 +60,10 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
       const off = await getOffering();
       setOffering(off);
       // Weekly with 3 days free is the primary plan (Young: weekly beat yearly 3x).
+      // During a launch offer the Lifetime price is set to 0 in App Store Connect; then it leads.
+      const freeLifetime = off?.lifetime && off.lifetime.product.price === 0 ? off.lifetime : null;
       const primary =
-        off?.weekly ?? off?.annual ?? off?.lifetime ?? off?.availablePackages?.[0] ?? null;
+        freeLifetime ?? off?.weekly ?? off?.annual ?? off?.lifetime ?? off?.availablePackages?.[0] ?? null;
       setSelected(primary);
       setLoading(false);
     })();
@@ -97,9 +99,12 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
     }
   };
 
-  // Order: Weekly (primary), Yearly, Lifetime (anchor).
+  const lifetimeFree = (offering?.lifetime?.product.price ?? 1) === 0;
+  // Order: Weekly (primary), Yearly, Lifetime (anchor). Lifetime leads while it is free.
   const rank = (p: PurchasesPackage) =>
-    p.packageType === 'WEEKLY' ? 0 : p.packageType === 'ANNUAL' ? 1 : p.packageType === 'LIFETIME' ? 2 : 3;
+    p.packageType === 'LIFETIME' && lifetimeFree
+      ? -1
+      : p.packageType === 'WEEKLY' ? 0 : p.packageType === 'ANNUAL' ? 1 : p.packageType === 'LIFETIME' ? 2 : 3;
   const packages = [...(offering?.availablePackages ?? [])].sort((a, b) => rank(a) - rank(b));
 
   const weeklyPkg = packages.find((p) => p.packageType === 'WEEKLY');
@@ -132,7 +137,12 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
         annualTrial ? `; it starts with ${annualTrial} and you are not charged until the trial ends` : ''
       }.`
     );
-  if (lifetimePkg) disclosureParts.push(`Lifetime ${lifetimePkg.product.priceString} is a one-time purchase.`);
+  if (lifetimePkg)
+    disclosureParts.push(
+      lifetimeFree
+        ? 'Lifetime is a one-time purchase, free right now as a launch offer.'
+        : `Lifetime ${lifetimePkg.product.priceString} is a one-time purchase.`
+    );
   const disclosure =
     (disclosureParts.length > 0
       ? disclosureParts.join(' ')
@@ -156,7 +166,9 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
             Records ready{'\n'}before anyone asks
           </Text>
           <Text style={[styles.subtitle, { color: theme.textSecondary }]}>
-            Start with {weeklyTrial ?? '3 days free'}. Log every lesson, watch your days and hours fill up, and hand your district a clean attendance log and portfolio.
+            {lifetimeFree
+              ? 'Launch offer: Pro is free right now. Get it once and keep it forever.'
+              : `Start with ${weeklyTrial ?? '3 days free'}. Log every lesson, watch your days and hours fill up, and hand your district a clean attendance log and portfolio.`}
           </Text>
 
           <View style={styles.features}>
@@ -200,7 +212,9 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
                   : isAnnual
                     ? `${annualTrial ? `${annualTrial}, then ` : ''}${p.product.priceString}/year${annualPerMonth ? ` · ${annualPerMonth}` : ''}`
                     : isLifetime
-                      ? 'Pay once, keep forever'
+                      ? lifetimeFree
+                        ? 'Free right now, keep forever'
+                        : 'Pay once, keep forever'
                       : '';
                 return (
                   <Pressable
@@ -217,13 +231,13 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
                     <View style={{ flex: 1 }}>
                       <View style={styles.pkgTitleRow}>
                         <Text style={[styles.pkgTitle, { color: theme.text }]}>{title}</Text>
-                        {isWeekly && (
+                        {(lifetimeFree ? isLifetime : isWeekly) && (
                           <View style={[styles.popular, { backgroundColor: theme.accent }]}>
-                            <Text style={styles.popularText}>MOST POPULAR</Text>
+                            <Text style={styles.popularText}>{lifetimeFree ? 'LAUNCH OFFER' : 'MOST POPULAR'}</Text>
                           </View>
                         )}
                       </View>
-                      <Text style={[styles.pkgLine, { color: isWeekly || isAnnual ? theme.accent : theme.textSecondary }]}>
+                      <Text style={[styles.pkgLine, { color: isWeekly || isAnnual || (isLifetime && lifetimeFree) ? theme.accent : theme.textSecondary }]}>
                         {line}
                       </Text>
                       {isWeekly && weeklyPerYear && (
@@ -231,7 +245,7 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
                       )}
                     </View>
                     <Text style={[styles.pkgPrice, { color: theme.text }]}>
-                      {p.product.priceString}
+                      {isLifetime && lifetimeFree ? 'Free' : p.product.priceString}
                       <Text style={{ color: theme.textSecondary, fontSize: 13 }}>
                         {isAnnual ? '/yr' : isWeekly ? '/wk' : ''}
                       </Text>
@@ -242,13 +256,15 @@ export default function PaywallModal({ privacyUrl }: { privacyUrl: string }) {
               {/* Copy lever 2: the button says Continue, never Subscribe. */}
               <PillButton
                 theme={theme}
-                label={purchasing ? 'One moment…' : 'Continue'}
+                label={purchasing ? 'One moment…' : lifetimeFree && selected?.packageType === 'LIFETIME' ? 'Get Pro free' : 'Continue'}
                 onPress={buy}
                 disabled={purchasing || !selected}
               />
               {/* Copy lever 3: "No payment now" on trial tiers. */}
               {selected?.packageType === 'LIFETIME' ? (
-                <Text style={[styles.noPayment, { color: theme.success }]}>✓ One-time purchase, no subscription</Text>
+                <Text style={[styles.noPayment, { color: theme.success }]}>
+                  {lifetimeFree ? '✓ Free, no subscription, yours for good' : '✓ One-time purchase, no subscription'}
+                </Text>
               ) : selected?.product.introPrice?.price === 0 ? (
                 <Text style={[styles.noPayment, { color: theme.success }]}>✓ No payment now</Text>
               ) : null}

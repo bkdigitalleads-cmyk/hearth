@@ -4,7 +4,7 @@
     "description": "Homeschool attendance, hours and portfolio tracker.",
     "slug": "hearth-homeschool-tracker",
     "scheme": "hearth",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -12,7 +12,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.bwk.hearth",
-      "buildNumber": "11",
+      "buildNumber": "12",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "NSFaceIDUsageDescription": "Hearth uses Face ID to lock your homeschool records so only you can see them."

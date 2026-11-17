@@ -1,4 +1,4 @@
-# Hearth — App Store metadata (v1.0) — DRAFT, pricing needs Brian's approval
+# Hearth: App Store metadata (v1.0), DRAFT, pricing needs Brian's approval
 
 ## Identity
 - **App name (26/30):** `Hearth: Homeschool Tracker`
@@ -16,13 +16,13 @@ homeschool, tracker, attendance, hours, portfolio.
 **en-US (99/100):**
 `planner,scheduler,log,record,sheet,printable,days,lesson,student,state,report,evaluator,umbrella`
 
-**es-MX (additional English terms):**
-`curriculum,grade,subject,teacher,parent,family,kids,co-op,portfolio,pdf`
+**es-MX (additional English terms, 100/100, set in version 1.0.7):**
+`school,home,teacher,class,schedule,homework,gradebook,kids,learning,report,card,reading,daily,family`
 
 **ar-SA (additional English terms):**
 `compliance,requirement,law,diary,logbook,calendar,timesheet,progress,year,records`
 
-## Description (EULA + Privacy links REQUIRED — do not remove)
+## Description (EULA + Privacy links REQUIRED, do not remove)
 
 Hearth is the homeschool tracker that keeps your attendance and hours for you, so records are ready before anyone asks.
 
@@ -62,9 +62,9 @@ Track homeschool attendance days and hours per student against your state's requ
 ## What's New (1.0)
 Welcome to Hearth! Log lessons in seconds, track days and hours against your state's requirement, and export attendance and portfolio PDFs.
 
-## Pricing (RevenueCat: entitlement `pro`, offering `default`) — PROPOSED, needs Brian's OK
-- `hearth_pro_lifetime` — non-consumable IAP, **$24.99** (hero: pay once, keep for every school year)
-- `hearth_pro_yearly` — auto-renewing subscription, **$12.99/yr** (anchor)
+## Pricing (RevenueCat: entitlement `pro`, offering `default`): PROPOSED, needs Brian's OK
+- `hearth_pro_lifetime`: non-consumable IAP, **$24.99** (hero: pay once, keep for every school year)
+- `hearth_pro_yearly`: auto-renewing subscription, **$12.99/yr** (anchor)
 - ONE subscription group "Hearth Pro" with GROUP-level localization set immediately
 - Free tier: 14 entries; no time-limited trial
 - Rationale: multi-year use (families homeschool for years) justifies a higher lifetime than Merit's $19.99; yearly at $12.99 keeps the ~2x gap.
@@ -78,8 +78,8 @@ all data is stored on-device. Camera/photo access is used only to attach a photo
 of a student's work to a lesson entry. State requirement summaries are informational.
 
 ## App Privacy labels
-- Purchases → Purchase History: App Functionality, not linked, no tracking
-- Everything else: Data Not Collected
+- Purchases → Purchase History: App Functionality, not linked to you, no tracking
+- The label is not "Data Not Collected": it lists Purchases (purchase history), not linked to you. No other data types are collected.
 
 ## URLs
 - Privacy: https://bkdigitalleads-cmyk.github.io/hearth/privacy.html
@@ -92,7 +92,7 @@ of a student's work to a lesson entry. State requirement summaries are informati
 3. Attendance & hours PDF in share sheet (money shot: table + certification block)
 4. Portfolio PDF page with a work-sample photo
 5. Settings → State & target (state picker or the state row with days/hours)
-6. Paywall (lifetime hero) — also record the 30–60s paywall video here
+6. Paywall (lifetime hero), also record the 30–60s paywall video here
 
 ## Rename, Sep 30 2026 (version 1.0.4)
 
@@ -100,3 +100,11 @@ of a student's work to a lesson entry. State requirement summaries are informati
 - Subtitle (en-US): `Attendance Log, Hours, Records`
 - Keywords (en-US): `record,keeping,scheduler,portfolio,lesson,curriculum,student,transcript,grade,state,compliance,pdf`
 - Reason: the head term with measured search demand leads the name; no brand word (Steve Young rule). Set in App Store Connect on version 1.0.4.
+
+## Keyword release, Nov 2026 (version 1.0.7, build 12)
+
+- Purpose: new App Store keywords only. No feature or design changes in the app.
+- Keywords (es-MX, 100/100): `school,home,teacher,class,schedule,homework,gradebook,kids,learning,report,card,reading,daily,family`
+- Previous es-MX keywords: `curriculum,grade,subject,teacher,parent,family,kids,co-op,portfolio,pdf`
+- Keywords (en-US): unchanged.
+- What's New (1.0.7): Small fixes and improvements.
